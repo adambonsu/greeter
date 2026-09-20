@@ -1,5 +1,14 @@
 schema: spec-driven
 
+context: |
+  See AGENTS.md for full project conventions. Summary:
+  - Hexagonal architecture: domain / ports / adapters under lib/greeter/
+  - Dependencies point inward only; domain must not reference adapters
+  - All collaborators injected via constructor keyword arguments; no globals or singletons
+  - TDD: failing RSpec example before implementation, same commit
+  - Every OpenSpec spec scenario maps to exactly one Cucumber scenario tagged with the requirement name
+  - Ruby 4.0.0, frozen_string_literal on every file, RuboCop clean
+
 # Project context (optional)
 # This is shown to AI when creating artifacts.
 # Add your tech stack, conventions, style guides, domain knowledge, etc.
