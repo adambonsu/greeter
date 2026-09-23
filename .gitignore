@@ -16,6 +16,7 @@
 
 # Benchmarks output
 /tmp/
+/perf/baseline.json
 
 # OS
 .DS_Store
