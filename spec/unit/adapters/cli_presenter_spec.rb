@@ -1,0 +1,30 @@
+# frozen_string_literal: true
+
+require "stringio"
+require "greeter/adapters/cli_presenter"
+require "greeter/domain/guest_name"
+require "greeter/domain/greeting"
+
+RSpec.describe Greeter::Adapters::CliPresenter do
+  let(:output)    { StringIO.new }
+  let(:presenter) { described_class.new(output: output) }
+
+  def build_greeting(name:, time: Time.utc(2024, 6, 1, 9, 0, 0))
+    Greeter::Domain::Greeting.new(
+      guest_name: Greeter::Domain::GuestName.new(name),
+      greeted_at: time
+    )
+  end
+
+  # Scenario: Greets a named guest
+  it "writes 'Hello, Alice!' to the injected IO" do
+    presenter.present(build_greeting(name: "Alice"))
+    expect(output.string).to eq("Hello, Alice!\n")
+  end
+
+  # Scenario: Normalises casing and whitespace
+  it "uses the display value from GuestName, reflecting normalised casing" do
+    presenter.present(build_greeting(name: "  alice smith  "))
+    expect(output.string).to eq("Hello, Alice Smith!\n")
+  end
+end

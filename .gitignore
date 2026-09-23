@@ -1,0 +1,31 @@
+# Bundler
+/.bundle/
+/vendor/bundle
+
+# Ruby version managers
+/.ruby-version
+
+# RSpec
+/spec/examples.txt
+
+# SimpleCov
+/coverage/
+
+# Cucumber
+/rerun.txt
+
+# Benchmarks output
+/tmp/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Executables built by bundler
+/bin/
