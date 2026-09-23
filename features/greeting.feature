@@ -1,0 +1,40 @@
+# frozen_string_literal: true
+
+@requirement-guest-greeting
+Feature: Guest greeting
+
+  @scenario-greets-a-named-guest
+  Scenario: Greets a named guest
+    When the CLI is invoked with the name "Alice"
+    Then the exit code is 0
+    And stdout contains "Hello, Alice!"
+
+  @scenario-normalises-casing-and-whitespace
+  Scenario: Normalises casing and whitespace
+    When the CLI is invoked with the name "  alice smith  "
+    Then the exit code is 0
+    And stdout contains "Hello, Alice Smith!"
+
+  @scenario-rejects-an-empty-or-whitespace-only-name
+  Scenario: Rejects an empty or whitespace-only name
+    When the CLI is invoked with the name ""
+    Then the exit code is 2
+    And stderr contains an invalid name message
+    And stdout is empty
+
+  @scenario-rejects-a-name-longer-than-64-characters
+  Scenario: Rejects a name longer than 64 characters
+    When the CLI is invoked with a name that is 65 characters long
+    Then the exit code is 2
+    And stderr contains a name too long message
+
+  @scenario-rejects-names-containing-control-or-escape-characters
+  Scenario: Rejects names containing control or escape characters
+    When the CLI is invoked with the name "\e[31m"
+    Then the exit code is 2
+    And stderr contains an invalid characters message
+
+  @scenario-emits-the-greeting-in-under-5-ms-at-p99-for-a-single-invocation
+  Scenario: Emits the greeting in under 5 ms at p99 for a single invocation
+    When GreetingService#greet is benchmarked with a valid name and a FixedClock
+    Then the p99 wall-clock time per iteration is below 5 ms

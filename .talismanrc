@@ -52,6 +52,8 @@ fileignoreconfig:
   checksum: c3ddb846dfb9ac4f1b57a71058373325119d6ca7b9b46d80b0444a2e968fb69a
 - filename: .amazonq/skills/openspec-explore/SKILL.md
   checksum: 876a1108aa1e17308218900de76d3b845b201c0dd07b930bd7ad353bd108316d
+- filename: features/support/env.rb
+  checksum: 58755475412726955b21faa328df3560af0614c0f35b8c22a98aed21cd41b481
 - filename: openspec/changes/add-hello-world-greeting/proposal.md
   checksum: ffdb176bb675cddfca1d7d9871c5cf1cf355b5db93ca207fe8f176bafadeca97
 - filename: openspec/changes/add-hello-world-greeting/design.md
