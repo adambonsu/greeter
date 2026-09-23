@@ -30,7 +30,7 @@ Feature: Guest greeting
 
   @scenario-rejects-names-containing-control-or-escape-characters
   Scenario: Rejects names containing control or escape characters
-    When the CLI is invoked with the name "\e[31m"
+    When the CLI is invoked with a name containing an escape sequence
     Then the exit code is 2
     And stderr contains an invalid characters message
 

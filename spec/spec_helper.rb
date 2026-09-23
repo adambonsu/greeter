@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require "simplecov"
+require 'simplecov'
 
 SimpleCov.start do
   enable_coverage :branch
   minimum_coverage 95
 
-  group "Domain",   "lib/greeter/domain"
-  group "Ports",    "lib/greeter/ports"
-  group "Adapters", "lib/greeter/adapters"
+  group 'Domain',   'lib/greeter/domain'
+  group 'Ports',    'lib/greeter/ports'
+  group 'Adapters', 'lib/greeter/adapters'
 
-  skip "/spec/"
+  skip '/spec/'
 end
 
-Dir[File.join(__dir__, "support", "**", "*.rb")].each { |f| require f }
+Dir[File.join(__dir__, 'support', '**', '*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

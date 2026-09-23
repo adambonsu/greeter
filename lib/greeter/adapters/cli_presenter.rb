@@ -1,1 +1,17 @@
 # frozen_string_literal: true
+
+require 'greeter/ports/greeting_presenter'
+
+module Greeter
+  module Adapters
+    class CliPresenter < Ports::GreetingPresenter
+      def initialize(output: $stdout) # rubocop:disable Lint/MissingSuper
+        @output = output
+      end
+
+      def present(greeting)
+        @output.puts("Hello, #{greeting.guest_name.display}!")
+      end
+    end
+  end
+end

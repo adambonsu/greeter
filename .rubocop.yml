@@ -1,0 +1,11 @@
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 4.0
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+    - "features/**/*"

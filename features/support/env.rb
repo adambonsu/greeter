@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift(File.join(__dir__, "..", "..", "lib"))
-$LOAD_PATH.unshift(File.join(__dir__, "..", "..", "spec", "support"))
+$LOAD_PATH.unshift(File.join(__dir__, '..', '..', 'lib'))
+$LOAD_PATH.unshift(File.join(__dir__, '..', '..', 'spec', 'support'))
 
-require "stringio"
-require "fixed_clock"
-require "greeter/domain/guest_name"
-require "greeter/domain/greeting"
-require "greeter/domain/greeting_service"
-require "greeter/adapters/cli_presenter"
+require 'stringio'
+require 'fixed_clock'
+require 'greeter/domain/guest_name'
+require 'greeter/domain/greeting'
+require 'greeter/domain/greeting_service'
+require 'greeter/adapters/cli_presenter'
 
 module GreeterWorld
   def stdout_io
