@@ -1,6 +1,8 @@
 AllCops:
   NewCops: enable
   TargetRubyVersion: 4.0
+  Exclude:
+    - 'bin/security-scan'
 
 Style/Documentation:
   Enabled: false
@@ -9,3 +11,7 @@ Metrics/BlockLength:
   Exclude:
     - "spec/**/*"
     - "features/**/*"
+
+Metrics/ModuleLength:
+  Exclude:
+    - "spec/security/**/*"
