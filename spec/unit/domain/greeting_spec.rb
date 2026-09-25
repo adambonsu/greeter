@@ -4,10 +4,10 @@ require 'greeter/domain/guest_name'
 require 'greeter/domain/greeting'
 
 RSpec.describe Greeter::Domain::Greeting do
+  subject(:greeting) { described_class.new(guest_name: guest_name, greeted_at: greeted_at) }
+
   let(:guest_name) { Greeter::Domain::GuestName.new('Alice') }
   let(:greeted_at) { Time.utc(2024, 6, 1, 9, 0, 0) }
-
-  subject(:greeting) { described_class.new(guest_name: guest_name, greeted_at: greeted_at) }
 
   # Scenario: Greets a named guest — value object holds the right data
   it 'exposes guest_name' do

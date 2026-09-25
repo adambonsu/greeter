@@ -15,11 +15,11 @@ RSpec.describe Greeter::Domain::GuestName do
     end
   end
 
-  include_examples 'an invalid guest name', ''
-  include_examples 'an invalid guest name', '   '
-  include_examples 'an invalid guest name', 'a' * 65
-  include_examples 'an invalid guest name', "\e[31m"
-  include_examples 'an invalid guest name', "Alice\n"
+  it_behaves_like 'an invalid guest name', ''
+  it_behaves_like 'an invalid guest name', '   '
+  it_behaves_like 'an invalid guest name', 'a' * 65
+  it_behaves_like 'an invalid guest name', "\e[31m"
+  it_behaves_like 'an invalid guest name', "Alice\n"
 
   # ---------------------------------------------------------------------------
   # Scenario: Greets a named guest — value is preserved after construction

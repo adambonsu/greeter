@@ -3,10 +3,10 @@
 require 'greeter/domain/greeting_service'
 
 RSpec.describe Greeter::Domain::GreetingService do
+  subject(:service) { described_class.new(clock: clock) }
+
   let(:fixed_time) { Time.utc(2024, 6, 1, 9, 0, 0) }
   let(:clock)      { FixedClock.new(fixed_time) }
-
-  subject(:service) { described_class.new(clock: clock) }
 
   # Scenario: Greets a named guest
   describe '#greet' do

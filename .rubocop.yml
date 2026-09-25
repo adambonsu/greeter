@@ -1,3 +1,6 @@
+plugins:
+  - rubocop-rspec
+
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.3
@@ -15,3 +18,52 @@ Metrics/BlockLength:
 Metrics/ModuleLength:
   Exclude:
     - "spec/security/**/*"
+
+# ---------------------------------------------------------------------------
+# RSpec cops
+#
+# This project uses an intentional spec layout (spec/unit, spec/security,
+# spec/benchmarks) that diverges from rubocop-rspec's default class-mirroring
+# convention, plus cross-cutting security and benchmark specs that describe
+# behaviours rather than a single class. The settings below keep the cops
+# meaningful for ordinary unit specs while not fighting that structure.
+# ---------------------------------------------------------------------------
+
+# Our unit specs live under spec/unit/... rather than spec/greeter/...,
+# so the class-path-mirroring check does not apply.
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+# Benchmark "specs" are executable performance checks, not *_spec.rb files.
+RSpec/SpecFilePathSuffix:
+  Exclude:
+    - "spec/benchmarks/**/*"
+
+# Security and benchmark specs describe behaviours/scenarios, not one class.
+RSpec/DescribeClass:
+  Exclude:
+    - "spec/security/**/*"
+    - "spec/benchmarks/**/*"
+
+# Security and benchmark examples are inherently multi-step.
+RSpec/ExampleLength:
+  Exclude:
+    - "spec/security/**/*"
+    - "spec/benchmarks/**/*"
+
+RSpec/MultipleExpectations:
+  Exclude:
+    - "spec/security/**/*"
+    - "spec/benchmarks/**/*"
+    - "spec/unit/adapters/system_clock_spec.rb"
+
+# The security suite generates examples in a loop from source-file paths;
+# the "leaked" locals are the parameterisation mechanism, not test state.
+RSpec/LeakyLocalVariable:
+  Exclude:
+    - "spec/security/**/*"
+
+# fake_clock_spec deliberately asserts repeated calls return the same value.
+RSpec/IdenticalEqualityAssertion:
+  Exclude:
+    - "spec/unit/adapters/fake_clock_spec.rb"
