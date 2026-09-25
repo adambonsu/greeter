@@ -1,9 +1,5 @@
 fileignoreconfig:
 
-- filename: AGENTS.md
-  checksum: f1b60e6fdfe312e4aaea974c94f9508374d4f25d86840c3358e17fd85db87bf5
-- filename: Gemfile.lock
-  checksum: c7faf7043726ff1c7a9697185aad035d547ee71e61243f8348d0a77c6402949b
 - filename: .amazonq/skills/openspec-new-change/SKILL.md
   checksum: 23dd1a43f22fb503fa3f5474105f6ebe1b7a8aeab75f09c06ab3b16e52ab2ccc
 - filename: .amazonq/skills/openspec-update-change/SKILL.md
@@ -54,12 +50,16 @@ fileignoreconfig:
   checksum: 876a1108aa1e17308218900de76d3b845b201c0dd07b930bd7ad353bd108316d
 - filename: .github/workflows/ci.yml
   checksum: 1381768bd22e0a789132a0f19d0dce52864c3586b47ddb7688d3f4c7668a3811
+- filename: AGENTS.md
+  checksum: f1b60e6fdfe312e4aaea974c94f9508374d4f25d86840c3358e17fd85db87bf5
+- filename: Gemfile.lock
+  checksum: c7faf7043726ff1c7a9697185aad035d547ee71e61243f8348d0a77c6402949b
 - filename: features/support/env.rb
   checksum: 56bd38aff9a56d3b7f3cd4e509496369373e3ed9b5f1e40064ee3197be87ceb7
-- filename: openspec/changes/add-hello-world-greeting/proposal.md
-  checksum: ffdb176bb675cddfca1d7d9871c5cf1cf355b5db93ca207fe8f176bafadeca97
-- filename: openspec/changes/add-hello-world-greeting/design.md
-  checksum: 9be4caa054c5bd73af417c5e5860b935790d3c60114925c0cd55db3d45dec4a7
-- filename: openspec/changes/add-hello-world-greeting/tasks.md
-  checksum: 8ea62ad59010c0595e96ed97f1af4ab24f96fba607dce522924a4a6c137ee82f
+- filename: openspec/changes/archive/2026-09-25-add-hello-world-greeting/proposal.md
+  checksum: bef1d309e3e9f6825e3dbab324ad77806bbaf1f75dad06ffa69a4234396b3b0c
+- filename: openspec/changes/archive/2026-09-25-add-hello-world-greeting/tasks.md
+  checksum: 658210f9a7e5e40a6617fb7366d1c0b0ff6226195f5fcf24d5dfe73bbff2ab8e
+- filename: openspec/changes/archive/2026-09-25-add-hello-world-greeting/design.md
+  checksum: 1662ec6410f25d27c4283dd5170b870dcaa20b5901b132c38ae4d0f5ac969fe6
   version: ""
