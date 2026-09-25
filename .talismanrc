@@ -3,7 +3,7 @@ fileignoreconfig:
 - filename: AGENTS.md
   checksum: f1b60e6fdfe312e4aaea974c94f9508374d4f25d86840c3358e17fd85db87bf5
 - filename: Gemfile.lock
-  checksum: c58b42fe9e8d5d95cc301bb5cb6a8b129de36a502ed3a658e51922b1f01ecee3
+  checksum: c7faf7043726ff1c7a9697185aad035d547ee71e61243f8348d0a77c6402949b
 - filename: .amazonq/skills/openspec-new-change/SKILL.md
   checksum: 23dd1a43f22fb503fa3f5474105f6ebe1b7a8aeab75f09c06ab3b16e52ab2ccc
 - filename: .amazonq/skills/openspec-update-change/SKILL.md
