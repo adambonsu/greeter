@@ -18,9 +18,9 @@ require 'greeter/domain/greeting_service'
 require 'greeter/adapters/cli_presenter'
 
 BASELINE_PATH = File.join(__dir__, 'baseline.json')
-BUDGET_MS     = 5.0
-REGRESSION_THRESHOLD = 1.20  # 20% worse than baseline triggers failure
-SAMPLE_COUNT  = 100_000
+BUDGET_MS = 5.0
+REGRESSION_THRESHOLD = 1.20 # 20% worse than baseline triggers failure
+SAMPLE_COUNT = 100_000
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -104,8 +104,12 @@ puts format('  cli    p99 : %.4f ms', cli_p99)
 # ---------------------------------------------------------------------------
 
 failures = []
-failures << format('domain p99 %.4f ms exceeds %.1f ms budget', domain_p99, BUDGET_MS) if domain_p99 >= BUDGET_MS
-failures << format('cli    p99 %.4f ms exceeds %.1f ms budget', cli_p99,    BUDGET_MS) if cli_p99    >= BUDGET_MS
+if domain_p99 >= BUDGET_MS
+  failures << format('domain p99 %<p99>.4f ms exceeds %<budget>.1f ms budget', p99: domain_p99, budget: BUDGET_MS)
+end
+if cli_p99 >= BUDGET_MS
+  failures << format('cli p99 %<p99>.4f ms exceeds %<budget>.1f ms budget', p99: cli_p99, budget: BUDGET_MS)
+end
 
 # ---------------------------------------------------------------------------
 # Baseline write / regression check
@@ -114,7 +118,7 @@ failures << format('cli    p99 %.4f ms exceeds %.1f ms budget', cli_p99,    BUDG
 results = {
   'recorded_at' => Time.now.utc.iso8601,
   'domain_p99_ms' => domain_p99.round(6),
-  'cli_p99_ms'    => cli_p99.round(6)
+  'cli_p99_ms' => cli_p99.round(6)
 }
 
 if File.exist?(BASELINE_PATH)
@@ -128,15 +132,15 @@ if File.exist?(BASELINE_PATH)
 
   if domain_p99 > baseline['domain_p99_ms'] * REGRESSION_THRESHOLD
     failures << format(
-      'domain p99 %.4f ms is >%.0f%% worse than baseline %.4f ms',
-      domain_p99, (REGRESSION_THRESHOLD - 1) * 100, baseline['domain_p99_ms']
+      'domain p99 %<p99>.4f ms is >%<pct>.0f%% worse than baseline %<baseline>.4f ms',
+      p99: domain_p99, pct: (REGRESSION_THRESHOLD - 1) * 100, baseline: baseline['domain_p99_ms']
     )
   end
 
   if cli_p99 > baseline['cli_p99_ms'] * REGRESSION_THRESHOLD
     failures << format(
-      'cli p99 %.4f ms is >%.0f%% worse than baseline %.4f ms',
-      cli_p99, (REGRESSION_THRESHOLD - 1) * 100, baseline['cli_p99_ms']
+      'cli p99 %<p99>.4f ms is >%<pct>.0f%% worse than baseline %<baseline>.4f ms',
+      p99: cli_p99, pct: (REGRESSION_THRESHOLD - 1) * 100, baseline: baseline['cli_p99_ms']
     )
   end
 else
@@ -149,11 +153,10 @@ end
 # Exit
 # ---------------------------------------------------------------------------
 
+puts
 if failures.empty?
-  puts
   puts 'All checks passed.'
 else
-  puts
   puts 'FAILURES:'
   failures.each { |f| puts "  - #{f}" }
   exit 1

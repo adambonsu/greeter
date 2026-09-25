@@ -26,6 +26,6 @@ Every OpenSpec spec scenario maps to exactly one Cucumber scenario, tagged with 
 
 ## Toolchain
 
-- Ruby 4.0.0
+- Ruby 3.3.5
 - `# frozen_string_literal: true` on every file
 - RuboCop clean (no offenses)

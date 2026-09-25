@@ -7,7 +7,7 @@ context: |
   - All collaborators injected via constructor keyword arguments; no globals or singletons
   - TDD: failing RSpec example before implementation, same commit
   - Every OpenSpec spec scenario maps to exactly one Cucumber scenario tagged with the requirement name
-  - Ruby 4.0.0, frozen_string_literal on every file, RuboCop clean
+  - Ruby 3.3.5, frozen_string_literal on every file, RuboCop clean
 
 # Project context (optional)
 # This is shown to AI when creating artifacts.
