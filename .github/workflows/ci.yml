@@ -54,7 +54,7 @@ jobs:
 
       - name: Upload SimpleCov HTML report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: simplecov-report
           path: coverage/
@@ -84,7 +84,7 @@ jobs:
 
       - name: Upload traceability report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: traceability-report
           path: tmp/traceability.json
@@ -159,7 +159,7 @@ jobs:
       # subsequent pushes to the same branch.  The cache is written back
       # automatically by actions/cache when the key is new.
       - name: Restore perf baseline cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: perf/baseline.json
           # Key includes the branch so each branch tracks its own baseline.
