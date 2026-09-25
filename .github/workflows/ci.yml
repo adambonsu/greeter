@@ -25,6 +25,8 @@ concurrency:
 env:
   BUNDLE_JOBS: 4
   BUNDLE_RETRY: 3
+  # Single source of truth for the Ruby toolchain across all jobs.
+  RUBY_VERSION: "3.3.5"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # spec
@@ -39,8 +41,7 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "4.0.7"
-          bundler: "4.0.20"
+          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
       - name: Run RSpec
@@ -66,8 +67,7 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "4.0.7"
-          bundler: "4.0.20"
+          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
       - name: Create tmp directory
@@ -96,8 +96,7 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "4.0.7"
-          bundler: "4.0.20"
+          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
       - name: Run RuboCop
@@ -115,8 +114,7 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "4.0.7"
-          bundler: "4.0.20"
+          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
       - name: Brakeman static analysis
@@ -140,8 +138,7 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "4.0.7"
-          bundler: "4.0.20"
+          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
       # Restore a branch-scoped baseline so regression checks fire on

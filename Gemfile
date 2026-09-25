@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '4.0.7'
+ruby '3.3.5'
 
 gem 'aws-sdk-dynamodb', '~> 1'
 
