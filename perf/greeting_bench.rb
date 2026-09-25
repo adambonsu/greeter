@@ -7,6 +7,7 @@
 # Subsequent runs compare against it and exit non-zero if p99 regresses > 20%.
 
 require 'json'
+require 'time'
 require 'stringio'
 require 'benchmark/ips'
 
@@ -21,6 +22,10 @@ BASELINE_PATH = File.join(__dir__, 'baseline.json')
 BUDGET_MS = 5.0
 REGRESSION_THRESHOLD = 1.20 # 20% worse than baseline triggers failure
 SAMPLE_COUNT = 100_000
+# Below this, p99 is dominated by clock resolution and jitter, so a relative
+# regression check is meaningless (a single tick reads as ">100% worse").
+# The absolute BUDGET_MS gate still applies regardless.
+NOISE_FLOOR_MS = 0.05
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -130,17 +135,27 @@ if File.exist?(BASELINE_PATH)
   puts format('  baseline domain p99 : %.4f ms', baseline['domain_p99_ms'])
   puts format('  baseline cli    p99 : %.4f ms', baseline['cli_p99_ms'])
 
-  if domain_p99 > baseline['domain_p99_ms'] * REGRESSION_THRESHOLD
+  baseline_domain = baseline['domain_p99_ms']
+  baseline_cli = baseline['cli_p99_ms']
+
+  if baseline_domain >= NOISE_FLOOR_MS && domain_p99 > baseline_domain * REGRESSION_THRESHOLD
     failures << format(
       'domain p99 %<p99>.4f ms is >%<pct>.0f%% worse than baseline %<baseline>.4f ms',
-      p99: domain_p99, pct: (REGRESSION_THRESHOLD - 1) * 100, baseline: baseline['domain_p99_ms']
+      p99: domain_p99, pct: (REGRESSION_THRESHOLD - 1) * 100, baseline: baseline_domain
     )
   end
 
-  if cli_p99 > baseline['cli_p99_ms'] * REGRESSION_THRESHOLD
+  if baseline_cli >= NOISE_FLOOR_MS && cli_p99 > baseline_cli * REGRESSION_THRESHOLD
     failures << format(
       'cli p99 %<p99>.4f ms is >%<pct>.0f%% worse than baseline %<baseline>.4f ms',
-      p99: cli_p99, pct: (REGRESSION_THRESHOLD - 1) * 100, baseline: baseline['cli_p99_ms']
+      p99: cli_p99, pct: (REGRESSION_THRESHOLD - 1) * 100, baseline: baseline_cli
+    )
+  end
+
+  if baseline_domain < NOISE_FLOOR_MS || baseline_cli < NOISE_FLOOR_MS
+    puts format(
+      '  (regression check skipped where baseline < %<floor>.2f ms noise floor)',
+      floor: NOISE_FLOOR_MS
     )
   end
 else

@@ -107,7 +107,12 @@ jobs:
           bundler-cache: true
 
       - name: Run RuboCop
-        run: bundle exec rubocop --format github
+        run: |
+          bundle check
+          bundle exec rubocop \
+            --config .rubocop.yml \
+            --format github \
+            --debug
 
 # ─────────────────────────────────────────────────────────────────────────────
 # security
