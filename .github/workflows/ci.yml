@@ -1,0 +1,176 @@
+# .github/workflows/ci.yml
+#
+# Jobs
+# ────
+#  spec      – RSpec + SimpleCov HTML artifact          ┐
+#  bdd       – Cucumber + traceability.json artifact     │ parallel
+#  lint      – RuboCop                                   │
+#  security  – Brakeman + bundler-audit                  ┘
+#  perf      – greeting_bench.rb (needs: spec)
+#  spec-gate – openspec validate (independent, blocks merge)
+
+name: CI
+
+"on":
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+# Cancel in-flight runs for the same ref so a fast-follow push doesn't queue.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUNDLE_JOBS: 4
+  BUNDLE_RETRY: 3
+
+# ─────────────────────────────────────────────────────────────────────────────
+# spec
+# ─────────────────────────────────────────────────────────────────────────────
+jobs:
+  spec:
+    name: RSpec
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+
+      - name: Run RSpec
+        run: bundle exec rspec --format progress --format html --out coverage/rspec.html
+
+      - name: Upload SimpleCov HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: simplecov-report
+          path: coverage/
+          retention-days: 14
+
+# ─────────────────────────────────────────────────────────────────────────────
+# bdd
+# ─────────────────────────────────────────────────────────────────────────────
+  bdd:
+    name: Cucumber BDD
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+
+      - name: Create tmp directory
+        run: mkdir -p tmp
+
+      - name: Run Cucumber
+        run: bundle exec cucumber --format progress
+
+      - name: Upload traceability report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: traceability-report
+          path: tmp/traceability.json
+          retention-days: 14
+
+# ─────────────────────────────────────────────────────────────────────────────
+# lint
+# ─────────────────────────────────────────────────────────────────────────────
+  lint:
+    name: RuboCop
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rubocop --format github
+
+# ─────────────────────────────────────────────────────────────────────────────
+# security
+# ─────────────────────────────────────────────────────────────────────────────
+  security:
+    name: Security scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+
+      - name: Brakeman static analysis
+        run: bundle exec brakeman --no-pager -q -w2
+
+      - name: bundler-audit CVE check
+        run: |
+          bundle exec bundle-audit update
+          bundle exec bundle-audit check
+
+# ─────────────────────────────────────────────────────────────────────────────
+# perf  (gated on spec passing)
+# ─────────────────────────────────────────────────────────────────────────────
+  perf:
+    name: Performance benchmark
+    runs-on: ubuntu-latest
+    needs: spec
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+
+      # Restore a branch-scoped baseline so regression checks fire on
+      # subsequent pushes to the same branch.  The cache is written back
+      # automatically by actions/cache when the key is new.
+      - name: Restore perf baseline cache
+        uses: actions/cache@v4
+        with:
+          path: perf/baseline.json
+          # Key includes the branch so each branch tracks its own baseline.
+          # Changing the key suffix busts the cache intentionally.
+          key: perf-baseline-${{ github.ref_name }}-v1
+          restore-keys: |
+            perf-baseline-${{ github.ref_name }}-
+
+      - name: Run benchmark (fails on regression or budget breach)
+        run: bundle exec ruby perf/greeting_bench.rb
+
+# ─────────────────────────────────────────────────────────────────────────────
+# spec-gate  (OpenSpec structural validation — blocks merge if malformed)
+# ─────────────────────────────────────────────────────────────────────────────
+  spec-gate:
+    name: OpenSpec validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install OpenSpec CLI
+        run: npm install --global @fission-ai/openspec
+
+      - name: Validate all OpenSpec changes
+        run: openspec validate --all --strict --json --no-interactive
