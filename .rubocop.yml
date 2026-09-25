@@ -1,11 +1,20 @@
 plugins:
   - rubocop-rspec
 
+# Merge our Exclude list with RuboCop's defaults (which exclude vendor/,
+# node_modules/, etc.) instead of replacing them. Without this, adding any
+# AllCops/Exclude entry drops the built-in excludes, so CI's bundler-cache
+# install into vendor/bundle would get linted.
+inherit_mode:
+  merge:
+    - Exclude
+
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.3
   Exclude:
     - 'bin/security-scan'
+    - 'vendor/**/*'
 
 Style/Documentation:
   Enabled: false
