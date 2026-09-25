@@ -44,6 +44,9 @@ jobs:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
+      - name: Create coverage directory
+        run: mkdir -p coverage
+
       - name: Run RSpec
         run: bundle exec rspec --format progress --format html --out coverage/rspec.html
 
